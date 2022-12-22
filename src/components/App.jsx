@@ -16,7 +16,7 @@ export const App = () => {
       {contacts.length > 0 ? (
         <ContactList name="Contacts" />
       ) : (
-        <p>Phonebook empty</p>
+        <p>Phonebook is empty</p>
       )}
     </MainContainer>
   );
