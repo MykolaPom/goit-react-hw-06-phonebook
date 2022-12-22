@@ -1,63 +1,80 @@
-import {useState} from 'react'
-import { Form, Input, Paragraph, ButtonSubmit } from './ContactForm.styled';
-import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { nanoid } from 'nanoid/non-secure';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'redux/contactsSlice';
 
-export const ContactForm = ({ onSubmit }) => {
+import { Form, Input, Paragraph, ButtonSubmit } from './ContactForm.styled';
+
+export const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts.items);
 
   const handleChange = e => {
-    switch (e.target.name) {
+    switch (e.currentTarget.name) {
       case 'name':
-        setName(e.target.value);
+        setName(e.currentTarget.value);
         break;
       case 'number':
-        setNumber(e.target.value);
+        setNumber(e.currentTarget.value);
         break;
       default:
         return;
-    };
+    }
   };
 
-  const onSubmitEvent = e => {
-    e.preventDefault();
-
-    onSubmit({ name, number });
+  const reset = () => {
     setName('');
     setNumber('');
   };
 
+  const formSubmitHandle = data => {
+    const id = nanoid();
+    if (contacts.filter(contact => contact.name === data.name).length > 0) {
+      alert(`${data.name} is already in contacts`);
+      return;
+    }
+    data.id = id;
+
+    dispatch(addContact(data));
+  };
+
+  const clickOnBtnSubmit = e => {
+    e.preventDefault();
+    formSubmitHandle({ name, number });
+    reset();
+  };
+
   return (
-    <Form onSubmit={onSubmitEvent}>
-      <label>
+    <Form onSubmit={clickOnBtnSubmit}>
+      <label title="Name">
         <Paragraph>Name</Paragraph>
         <Input
           type="text"
           name="name"
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
-          value={name}
+          placeholder="Enter name"
           onChange={handleChange}
-          placeholder="Enter your Name"
+          value={name}
         />
       </label>
-      <label>
+      <label title="Number">
         <Paragraph>Number</Paragraph>
         <Input
           type="tel"
           name="number"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
-          value={number}
+          placeholder="123-45-67"
           onChange={handleChange}
-          placeholder="123-456-78"
+          value={number}
         />
       </label>
       <ButtonSubmit type="submit">Add contact</ButtonSubmit>
     </Form>
   );
-};
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };

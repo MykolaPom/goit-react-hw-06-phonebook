@@ -1,5 +1,17 @@
 import styled from "@emotion/styled"
 
+export const ContactsItem = styled.div`
+  & p {
+    margin-bottom: 5px;
+  }
+  & ul {
+    margin-top: 10px;
+  }
+  & li {
+    font-size: 22px;
+  }
+`;
+
 export const ButtonDelete = styled.button`
   margin-top: 10px;
   margin-left: 10px;
@@ -15,4 +27,10 @@ export const ButtonDelete = styled.button`
     color: black;
     background-color: white;
   }
+`;
+
+export const Input = styled.input`
+  width: 50%;
+  height: 30px;
+  font-size: 24px;
 `;
