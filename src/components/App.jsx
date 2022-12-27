@@ -1,6 +1,6 @@
-import {ContactForm} from './ContactForm/ContactForm';
+import { ContactForm } from './ContactForm/ContactForm';
 import { MainContainer } from './Main/Main';
-import {ContactList} from './ContactList/ContactList';
+import { ContactList } from './ContactList/ContactList';
 import { useSelector } from 'react-redux';
 
 export const App = () => {
